@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Form, Formik } from "formik";
 import Input from "./Input";
@@ -17,6 +17,7 @@ export default function CreateCategory({
   refetch,
   editData,
 }) {
+  const [createCar, setCreateCar] = useState(false);
   const [createCat, { isSuccess, isError, error, data }] =
     useCreateCategoryMutation();
   const [
@@ -30,11 +31,11 @@ export default function CreateCategory({
   ] = useUpdateCategoryMutation();
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && createCar) {
       toast.success(data?.message);
       refetch();
       handleOpen();
-    } else if (updateIsSuccess) {
+    } else if (updateIsSuccess && !createCar) {
       toast.success(updateData?.message);
       refetch();
       handleOpen();
@@ -94,8 +95,10 @@ export default function CreateCategory({
                           title: values.catName,
                         };
                         console.log(data, "09");
+                        setCreateCar(false);
                         updateCat(data);
                       } else {
+                        setCreateCar(true);
                         createCat({ title: values.catName });
                       }
                     }}
