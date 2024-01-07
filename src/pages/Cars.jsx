@@ -82,7 +82,9 @@ const Tasks = () => {
       <DataTable
         data={data?.data?.cars || []}
         columns={getCarsData(handleDelModalOpen, handleModalOpen)}
-        pending={false}
+        loading={isLoading}
+        totalRows={data?.data?.count}
+        setPage={setPage}
       />
     </div>
   );

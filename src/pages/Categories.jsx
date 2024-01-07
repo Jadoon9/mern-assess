@@ -66,7 +66,6 @@ const Categories = () => {
       <DataTable
         data={data?.data?.categories}
         columns={getColumnsData(handleDelModalOpen, handleModalOpen)}
-        pending={false}
         loading={isLoading}
         totalRows={data?.data?.count}
         setPage={setPage}
