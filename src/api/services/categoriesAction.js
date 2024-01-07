@@ -23,9 +23,9 @@ const createCategoryService = authApiService.injectEndpoints({
     }),
 
     getCategories: build.query({
-      query: () => {
+      query: (page) => {
         return {
-          url: `/category/getAllCategory`,
+          url: `/category/getAllCategory?page=${page?.page}`,
           method: "GET",
         };
       },

@@ -15,7 +15,7 @@ const NavBar = () => {
           <Link
             to="/"
             className={`text-gray-800 hover:underline ${
-              location.pathname === "/" ? "text-[#9f7aea]" : ""
+              location.pathname === "/" ? " border-b-2 border-[#9f7aea]" : ""
             }`}
           >
             Cars
@@ -25,7 +25,9 @@ const NavBar = () => {
           <Link
             to="/categories"
             className={`text-gray-800 hover:underline ${
-              location.pathname === "/categories" ? "text-[#9f7aea" : ""
+              location.pathname === "/categories"
+                ? " border-b-2 border-[#9f7aea]"
+                : ""
             }`}
           >
             Categories

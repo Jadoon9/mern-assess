@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 
 import { Form, Formik } from "formik";
@@ -20,6 +20,7 @@ export default function CreateCarModal({
   refetch,
   catData,
 }) {
+  const [createCarr, setCreateCar] = useState(false);
   const [createCar, { isSuccess, isError, error, data }] =
     useCreateCarMutation();
   const [
@@ -33,11 +34,11 @@ export default function CreateCarModal({
   ] = useUpdateCarMutation();
 
   useEffect(() => {
-    if (isSuccess) {
+    if (isSuccess && createCarr) {
       toast.success(data?.message);
       refetch();
       handleOpen();
-    } else if (updateIsSuccess) {
+    } else if (updateIsSuccess && !createCarr) {
       toast.success(updateData?.message);
       refetch();
       handleOpen();
@@ -104,8 +105,10 @@ export default function CreateCarModal({
                         category: values?.catName,
                       };
                       if (editData?.title) {
+                        setCreateCar(false);
                         updateCar(data);
                       } else {
+                        setCreateCar(true);
                         createCar(data);
                       }
                     }}

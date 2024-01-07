@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Button from "../components/Button.jsx";
 import DataTable from "../components/DataTable.jsx";
 import Navbar from "../components/Navbar.jsx";
-import { getCarsData, getColumnsData } from "../utils/data.jsx";
+import { getCarsData } from "../utils/data.jsx";
 import DeleteModal from "../components/DeleteModal.jsx";
 
 import { useGetCarsQuery } from "../api/services/carAction.js";
@@ -24,14 +24,13 @@ const Tasks = () => {
     }
   );
 
-  console.log(catData, "catData");
-  const { isLoading, isSuccess, isFetching, isError, refetch, error, data } =
-    useGetCarsQuery(
-      { page },
-      {
-        refetchOnMountOrArgChange: true,
-      }
-    );
+  console.log(setPage, "catData");
+  const { isLoading, refetch, data } = useGetCarsQuery(
+    { page },
+    {
+      refetchOnMountOrArgChange: true,
+    }
+  );
 
   const handleModalOpen = (data) => {
     setIsOpen(!isOpen);
