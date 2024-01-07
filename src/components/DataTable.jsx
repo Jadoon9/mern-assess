@@ -21,8 +21,10 @@ const DataTablee = ({ data, columns, page, isLoading, totalRows, setPage }) => {
         columns={columns}
         data={data}
         progressPending={isLoading}
+        progressComponent={<Loader />}
         pagination
         paginationServer
+        paginationRowsPerPageOptions={[]}
         paginationTotalRows={totalRows}
         paginationDefaultPage={page}
         onChangePage={handlePageChange}
