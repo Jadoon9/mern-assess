@@ -8,10 +8,7 @@ import CustomLoader from "./CustomLoader";
 import Loader from "./Loader";
 
 const DataTablee = ({ data, columns, page, isLoading, totalRows, setPage }) => {
-  const [perPage, setPerPage] = useState(10);
-
   const handlePageChange = (pageCount) => {
-    console.log(pageCount, "asdas3");
     setPage(pageCount);
   };
 
