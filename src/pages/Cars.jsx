@@ -67,7 +67,7 @@ const Tasks = () => {
         id={deleteId}
       />
       <Navbar />
-      <div className="flex-between">
+      <div className="flex-between my-6">
         <h1 className="h1-bold mb-2 text-[#9f7aea]">Cars</h1>
         <div>
           <h2 className="h1-bold mb-2 text-gray-400">

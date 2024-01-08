@@ -96,7 +96,6 @@ export default function CreateCarModal({
                     }}
                     validationSchema={carSchema}
                     onSubmit={(values) => {
-                      console.log(values, "asdad");
                       const data = {
                         color: values?.color,
                         model: values?.model,
@@ -104,9 +103,8 @@ export default function CreateCarModal({
                         registrationNo: values?.regNumb,
                         category: values?.catName,
                       };
-                      if (editData) {
+                      if (editData?.category) {
                         const updatedData = { data: data, id: editData?._id };
-                        console.log(updateData, "090909");
                         setCreateCar(false);
                         updateCar(updatedData);
                       } else {
