@@ -45,7 +45,7 @@ export const getCarsCol = (handleDelModalOpen, handleModalOpen) => {
   return [
     {
       name: "Category",
-      selector: (row) => row?.category?.title,
+      selector: (row) => row?.category?.title || "--",
       sortable: true,
     },
 
