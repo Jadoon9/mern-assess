@@ -14,29 +14,13 @@ export default {
     extend: {
       colors: {
         primary: {
-          500: "#C8BCF6",
+          500: "#9f7aea",
+          400: "#c8bcf6",
+          300: "#dad7eb",
         },
         secondary: {
           500: "#22252A",
         },
-        dark: {
-          100: "#000000",
-          200: "#0F1117",
-          300: "#151821",
-          400: "#212734",
-          500: "#101012",
-        },
-        light: {
-          900: "#FFFFFF",
-          800: "#F4F6F8",
-          850: "#FDFDFD",
-          700: "#DCE3F1",
-          500: "#7B8EC8",
-          400: "#858EAD",
-        },
-      },
-      focus: {
-        "primary-border-color": "#C8BCF6", // Replace with your desired focus border color
       },
 
       fontFamily: {

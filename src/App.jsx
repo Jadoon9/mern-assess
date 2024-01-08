@@ -6,15 +6,13 @@ import IsAuthenticated from "./components/isAuthenticated";
 import Cars from "./pages/Cars";
 import Categories from "./pages/Categories";
 import { ToastContainer } from "react-toastify";
-import { useSelector } from "react-redux";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const { isLoggedIn } = useSelector((state) => state.auth);
   return (
     <>
       <Routes>
-        <Route element={<IsAuthenticated isLoggedIn={isLoggedIn} />}>
+        <Route element={<IsAuthenticated />}>
           <Route path="/" element={<Cars />} />
           <Route path="/categories" element={<Categories />} />
         </Route>

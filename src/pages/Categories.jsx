@@ -55,7 +55,7 @@ const Categories = () => {
       />
       <Navbar />
       <div className="flex-between my-6">
-        <h1 className="h1-bold mb-2 text-[#9f7aea]">Categories</h1>
+        <h1 className="h1-bold mb-2 text-primary-500">Categories</h1>
         <h2 className="h1-bold mb-2 text-gray-400">
           Number of Added Categories : {data?.data?.count}
         </h2>

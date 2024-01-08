@@ -68,7 +68,7 @@ const Tasks = () => {
       />
       <Navbar />
       <div className="flex-between my-6">
-        <h1 className="h1-bold mb-2 text-[#9f7aea]">Cars</h1>
+        <h1 className="h1-bold mb-2 text-primary-500">Cars</h1>
         <div>
           <h2 className="h1-bold mb-2 text-gray-400">
             Number of Registered Cars : {data?.data?.count}

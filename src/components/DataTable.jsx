@@ -3,8 +3,7 @@
 import React, { useState } from "react";
 import DataTable from "react-data-table-component";
 import "react-data-table-component-extensions/dist/index.css";
-import DataTableExtensions from "react-data-table-component-extensions";
-import CustomLoader from "./CustomLoader";
+
 import Loader from "./Loader";
 
 const DataTablee = ({ data, columns, page, isLoading, totalRows, setPage }) => {

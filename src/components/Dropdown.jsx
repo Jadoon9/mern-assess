@@ -12,7 +12,7 @@ const DropDown = ({ options, label, placeholder, name }) => {
 
   return (
     <div className="w-full">
-      <label className="body-regular text-[#4F4F4F]">{label}</label>
+      <label className="body-regular text-secondary-500">{label}</label>
 
       <Listbox
         value={field.value}

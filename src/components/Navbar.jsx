@@ -11,12 +11,14 @@ const NavBar = () => {
     <nav className="bg-white p-4 custom-shadow rounded-md mb-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
-          <div className="text-xl font-bold text-[#9f7aea]">Ropstam</div>
+          <div className="text-xl font-bold text-primary-500">Ropstam</div>
           {/* Link to Page 1 */}
           <Link
             to="/"
-            className={`text-gray-800 hover:underline ${
-              location.pathname === "/" ? " border-b-2 border-[#9f7aea]" : ""
+            className={`text-secondary-500 transition duration-50 transform hover:scale-105  ${
+              location.pathname === "/"
+                ? "!text-primary-400 border-b-2 border-primary-400"
+                : ""
             }`}
           >
             Cars
@@ -25,9 +27,9 @@ const NavBar = () => {
           {/* Link to Page 2 */}
           <Link
             to="/categories"
-            className={`text-gray-800 hover:underline ${
+            className={`text-secondary-500  transition duration-50 transform hover:scale-105  ${
               location.pathname === "/categories"
-                ? " border-b-2 border-[#9f7aea]"
+                ? "!text-primary-400 border-b-2 border-primary-400"
                 : ""
             }`}
           >
@@ -36,10 +38,10 @@ const NavBar = () => {
         </div>
 
         <div className="flex items-center space-x-4">
-          <span className="text-gray-800">Welcome, {data?.email}</span>
+          <span className="text-secondary-500">Welcome, {data?.email}</span>
 
           <button
-            className="bg-[#9f7aea] text-white py-2 px-4 rounded-full hover:bg-red-700 focus:outline-none focus:ring focus:border-gray-900"
+            className="bg-primary-500 text-white py-2 px-4 rounded-full hover:bg-red-700 focus:outline-none focus:ring focus:border-gray-900 transition duration-50 transform hover:scale-105 "
             onClick={() => {
               localStorage.clear();
               dispatch({ type: "RESET" });

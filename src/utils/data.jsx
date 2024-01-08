@@ -32,12 +32,12 @@ export const getColumnsData = (handleDelModalOpen, handleModalOpen) => {
         <MdModeEdit
           key={d.title}
           onClick={(e) => handleClickEdit(e, d, handleModalOpen)}
-          className="mr-2 cursor-pointer"
+          className="mr-2 cursor-pointer transition duration-50 transform hover:scale-150"
         ></MdModeEdit>,
         <MdDelete
           key={1}
           onClick={(e) => handleClick(e, d._id, handleDelModalOpen)}
-          className="text-red-600 cursor-pointer"
+          className="text-red-600 cursor-pointer transition duration-50 transform hover:scale-150"
         ></MdDelete>,
       ],
     },
