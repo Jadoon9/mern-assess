@@ -1,6 +1,5 @@
 import { MdModeEdit, MdDelete } from "react-icons/md";
-import React from "react";
-import { convertUtcToLocalTime } from "./helpers";
+import { convertDateTime } from "./helpers";
 
 const handleClick = (e, id, handleDelModalOpen) => {
   e.stopPropagation();
@@ -11,18 +10,17 @@ const handleClickEdit = (e, data, handleModalOpen) => {
   handleModalOpen(data);
 };
 
-export const getColumnsData = (handleDelModalOpen, handleModalOpen) => {
+export const getCategoryCol = (handleDelModalOpen, handleModalOpen) => {
   return [
     {
       name: "Category Name",
-      selector: "title",
+      selector: (row) => row.title, // Function-based selector
       sortable: true,
     },
     {
       name: "Created At",
-      selector: "createdAt",
       sortable: true,
-      cell: (row) => convertUtcToLocalTime(row.createdAt),
+      selector: (row) => convertDateTime(row.createdAt),
     },
 
     {
@@ -43,35 +41,32 @@ export const getColumnsData = (handleDelModalOpen, handleModalOpen) => {
     },
   ];
 };
-export const getCarsData = (handleDelModalOpen, handleModalOpen) => {
+export const getCarsCol = (handleDelModalOpen, handleModalOpen) => {
   return [
     {
       name: "Category",
-      selector: "caregory",
+      selector: (row) => row?.category?.title,
       sortable: true,
-      cell: (row) => {
-        return row?.category?.title;
-      },
     },
 
     {
       name: "Color",
-      selector: "color",
+      selector: (row) => row?.color,
       sortable: true,
     },
     {
       name: "Maker",
-      selector: "maker",
+      selector: (row) => row?.maker,
       sortable: true,
     },
     {
       name: "Model",
-      selector: "model",
+      selector: (row) => row?.model,
       sortable: true,
     },
     {
-      name: "Regesteration #",
-      selector: "registrationNo",
+      name: "Reg #",
+      selector: (row) => row?.registrationNo,
       sortable: true,
     },
     {

@@ -1,4 +1,4 @@
-import { noAuthApiService } from "./noauthService";
+import { noAuthApiService } from "../noauthService";
 
 const createAuthentication = noAuthApiService.injectEndpoints({
   endpoints: (build) => ({

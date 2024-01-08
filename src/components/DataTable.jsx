@@ -1,12 +1,10 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
-import React, { useState } from "react";
+import React from "react";
 import DataTable from "react-data-table-component";
-import "react-data-table-component-extensions/dist/index.css";
-
 import Loader from "./Loader";
 
-const DataTablee = ({ data, columns, page, isLoading, totalRows, setPage }) => {
+const DataTablee = ({ data, columns, page, totalRows, setPage, isLoading }) => {
   const handlePageChange = (pageCount) => {
     setPage(pageCount);
   };

@@ -1,17 +1,17 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from "react";
-import bgImage from "../assets/loginbg.svg";
+import bgImage from "/assets/loginbg.svg";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { loginValSchema } from "../utils/validations";
-import { useLoginMutation } from "../api/services/authenticationActions";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import Loader from "../components/Loader";
 import { useDispatch } from "react-redux";
-import { userLogin } from "../api/slices/authSlice";
+import { userLogin } from "../redux/slices/authSlice";
+import { useLoginMutation } from "../redux/services/Auth";
 
 const Login = () => {
   const navigate = useNavigate();

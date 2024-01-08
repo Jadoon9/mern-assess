@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { Form, Formik } from "formik";
 import Input from "./Input";
@@ -8,16 +8,10 @@ import { categorySchema } from "../utils/validations";
 import {
   useCreateCategoryMutation,
   useUpdateCategoryMutation,
-} from "../api/services/categoriesAction";
+} from "../redux/services/Category";
 import { toast } from "react-toastify";
 
-export default function CreateCategory({
-  isOpen,
-  handleOpen,
-  refetch,
-  editData,
-}) {
-  const [createCar, setCreateCar] = useState(false);
+const CategoryModal = ({ isOpen, handleOpen, refetch, editData }) => {
   const [createCat, { isSuccess, isError, error, data }] =
     useCreateCategoryMutation();
   const [
@@ -30,23 +24,33 @@ export default function CreateCategory({
     },
   ] = useUpdateCategoryMutation();
 
-  useEffect(() => {
-    if (isSuccess && createCar) {
-      toast.success(data?.message);
-      refetch();
-      handleOpen();
-    } else if (updateIsSuccess && !createCar) {
-      toast.success(updateData?.message);
-      refetch();
-      handleOpen();
-    }
+  const handleMutationSuccess = (successMessage) => {
+    toast.success(successMessage);
+    refetch();
+    handleOpen();
+  };
 
-    if (isError) {
-      toast.error(error?.data?.message);
-    } else if (updateIsError) {
-      toast.error(updateError?.data?.message);
+  const handleMutationError = (errorMessage) => {
+    toast.error(errorMessage);
+  };
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      handleMutationSuccess(data?.message);
     }
-  }, [isSuccess, isError, updateIsError, updateIsSuccess]);
+    if (isError) {
+      handleMutationError(error?.data?.message);
+    }
+  }, [isSuccess, isError, data]);
+
+  useEffect(() => {
+    if (updateIsSuccess && updateData) {
+      handleMutationSuccess(updateData?.message);
+    }
+    if (updateIsError) {
+      handleMutationError(updateError?.data?.message);
+    }
+  }, [updateIsError, updateIsSuccess, updateData]);
 
   return (
     <>
@@ -80,25 +84,22 @@ export default function CreateCategory({
                     as="h3"
                     className="text-lg font-medium leading-6 text-primary-500"
                   >
-                    {editData?.title ? "Update" : "Add"} Category
+                    {editData?._id ? "Update" : "Add"} Category
                   </Dialog.Title>
 
                   <Formik
                     initialValues={{
-                      catName: editData?.title || "",
+                      title: editData?.title || "",
                     }}
                     validationSchema={categorySchema}
+                    enableReinitialize={true}
                     onSubmit={(values) => {
+                      let data = { title: values.title };
                       if (editData?.title) {
-                        const data = {
-                          id: editData?._id,
-                          title: values.catName,
-                        };
-                        setCreateCar(false);
+                        data["id"] = editData?._id;
                         updateCat(data);
                       } else {
-                        setCreateCar(true);
-                        createCat({ title: values.catName });
+                        createCat(data);
                       }
                     }}
                   >
@@ -107,7 +108,7 @@ export default function CreateCategory({
                         <div className="flex flex-col gap-6 justify-center items-center mt-2">
                           <Input
                             label="Catrgory Name"
-                            name="catName"
+                            name="title"
                             type="text"
                             placeholder="Enter Category Name"
                           />
@@ -115,7 +116,7 @@ export default function CreateCategory({
                           <div className="w-1/2 ">
                             <Button
                               btnText={
-                                editData?.title
+                                editData?._id
                                   ? "Update Category"
                                   : "Add Category"
                               }
@@ -133,4 +134,6 @@ export default function CreateCategory({
       </Transition>
     </>
   );
-}
+};
+
+export default CategoryModal;

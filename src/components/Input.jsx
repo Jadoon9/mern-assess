@@ -2,18 +2,10 @@
 import React from "react";
 import { useField } from "formik";
 
-const Input = ({
-  type,
-  placeholder,
-  label,
-  name,
-  valueHandler,
-  isRequired,
-}) => {
+const Input = ({ type, placeholder, label, name, isRequired }) => {
   const [field, meta] = useField(name);
   const handleChange = (e) => {
-    field.onChange(e); // Update the formik field value
-    valueHandler && valueHandler(e.target.name, e.target.value);
+    field.onChange(e);
   };
   return (
     <div className="w-full">

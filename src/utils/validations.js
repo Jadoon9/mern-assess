@@ -14,13 +14,12 @@ export const loginValSchema = yup.object({
   password: yup.string().required("Password is required"),
 });
 export const categorySchema = yup.object({
-  catName: yup.string().required("Name is required"),
+  title: yup.string().required("Category Name is required"),
 });
 export const carSchema = yup.object({
-  catName: yup.string().required("Category is required"),
-  // carName: yup.string().required("Car name is required"),
-  // color: yup.string().required("Car color is required"),
-  // model: yup.string().required("Car modle is required"),
-  // maker: yup.string().required("Car maker is required"),
-  // regNumb: yup.string().required("Registeration number is required"),
+  color: yup.string().required("Car color is required"),
+  model: yup.string().required("Car modle is required"),
+  maker: yup.string().required("Car maker is required"),
+  registrationNo: yup.string().required("Registration number is required"),
+  category: yup.string().matches(/^[0-9a-fA-F]{24}$/, "Invalid category ID"),
 });

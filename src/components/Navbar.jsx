@@ -1,6 +1,7 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const NavBar = () => {
   const location = useLocation();
@@ -12,7 +13,6 @@ const NavBar = () => {
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
           <div className="text-xl font-bold text-primary-500">Ropstam</div>
-          {/* Link to Page 1 */}
           <Link
             to="/"
             className={`text-secondary-500 transition duration-50 transform hover:scale-105  ${
@@ -45,6 +45,7 @@ const NavBar = () => {
             onClick={() => {
               localStorage.clear();
               dispatch({ type: "RESET" });
+              toast.success("Logout Succesfully!");
             }}
           >
             Logout

@@ -1,7 +1,19 @@
-import { authApiService } from "./authService";
+import { authApiService } from "../authService";
 
 const createCategoryService = authApiService.injectEndpoints({
   endpoints: (build) => ({
+    getCategories: build.query({
+      query: (data) => {
+        let url = `/category/getAllCategory?page=${data?.page}`;
+        if (data?.limit) {
+          url += `&limit=${data?.limit}`;
+        }
+        return {
+          url,
+          method: "GET",
+        };
+      },
+    }),
     createCategory: build.mutation({
       query: (data) => {
         return {
@@ -20,16 +32,6 @@ const createCategoryService = authApiService.injectEndpoints({
         };
       },
     }),
-
-    getCategories: build.query({
-      query: (page) => {
-        return {
-          url: `/category/getAllCategory?page=${page?.page}`,
-          method: "GET",
-        };
-      },
-    }),
-
     deleteCategories: build.mutation({
       query: (id) => {
         return {

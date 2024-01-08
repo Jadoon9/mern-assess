@@ -1,25 +1,58 @@
 /* eslint-disable react/prop-types */
-import { Dialog, Transition } from "@headlessui/react";
 import React, { Fragment, useEffect } from "react";
-
+import { Dialog, Transition } from "@headlessui/react";
 import Button from "./Button";
-import { useDeleteCategoriesMutation } from "../api/services/categoriesAction";
+import { useDeleteCategoriesMutation } from "../redux/services/Category";
 import { toast } from "react-toastify";
+import { useDeleteCarMutation } from "../redux/services/Car";
 
-export default function DeleteModal({ isOpen, handleOpen, id, refetch }) {
+export default function DeleteModal({
+  isOpen,
+  handleOpen,
+  id,
+  refetch,
+  myKey = false,
+}) {
   const [deleteCat, { isSuccess, isError, error, data }] =
     useDeleteCategoriesMutation();
+  const [
+    deleteCar,
+    {
+      isSuccess: delIsSuccess,
+      isError: delIsError,
+      error: delError,
+      data: delData,
+    },
+  ] = useDeleteCarMutation();
+
+  const handleMutationSuccess = (successMessage) => {
+    toast.success(successMessage);
+    refetch();
+    handleOpen();
+  };
+
+  const handleMutationError = (errorMessage) => {
+    toast.error(errorMessage);
+  };
 
   useEffect(() => {
-    if (isSuccess) {
-      toast.success(data?.message);
-      refetch();
-      handleOpen();
+    if (isSuccess && data) {
+      handleMutationSuccess(data?.message);
     }
     if (isError) {
-      toast.error(error?.data?.message);
+      handleMutationError(error?.data?.message);
     }
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, data]);
+
+  useEffect(() => {
+    if (delIsSuccess && delData) {
+      handleMutationSuccess(delData?.message);
+    }
+    if (delIsError) {
+      handleMutationError(delError?.data?.message);
+    }
+  }, [delIsSuccess, delIsError, delData]);
+
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
@@ -60,7 +93,13 @@ export default function DeleteModal({ isOpen, handleOpen, id, refetch }) {
                       btnText="Delete"
                       className="bg-rose-700 text-white"
                       nobg
-                      onClick={() => deleteCat(id)}
+                      onClick={() => {
+                        if (myKey) {
+                          deleteCar(id);
+                        } else {
+                          deleteCat(id);
+                        }
+                      }}
                     />
                   </div>
                 </Dialog.Panel>

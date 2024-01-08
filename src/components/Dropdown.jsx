@@ -5,6 +5,7 @@ import React, { Fragment } from "react";
 
 const DropDown = ({ options, label, placeholder, name }) => {
   const [field, meta, helpers] = useField(name);
+  console.log("fff", field.value);
 
   const handleChange = (selectedOption) => {
     helpers.setValue(selectedOption);
@@ -14,18 +15,17 @@ const DropDown = ({ options, label, placeholder, name }) => {
     <div className="w-full">
       <label className="body-regular text-secondary-500">{label}</label>
 
-      <Listbox
-        value={field.value}
-        onChange={(selectedOption) => handleChange(selectedOption)}
-      >
+      <Listbox onChange={(selectedOption) => handleChange(selectedOption)}>
         {({ open }) => (
           <>
             <div className="relative mt-1">
               <Listbox.Button
-                className={`w-full cursor-default appearance-none primary-border-color rounded-[8px] h-[42px] py-2 pl-3 pr-10 text-left focus:outline-none`}
+                className={`w-full cursor-default appearance-none border-2 border-primary-400 rounded-[8px] h-[42px] py-2 pl-3 pr-10 text-left focus:outline-none`}
               >
                 <span className="block truncate body-light">
-                  {field.value || placeholder}
+                  {field.value
+                    ? options.find((data) => data?._id === field.value)?.title
+                    : placeholder}
                 </span>
               </Listbox.Button>
               <Transition

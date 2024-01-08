@@ -1,14 +1,14 @@
 import React from "react";
-import bgImage from "../assets/loginbg.svg";
+import bgImage from "/assets/loginbg.svg";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import { Form, Formik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { signUpValSchema } from "../utils/validations";
-import { useSignUpMutation } from "../api/services/authenticationActions";
 import { useEffect } from "react";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
+import { useSignUpMutation } from "../redux/services/Auth";
 
 const SignUp = () => {
   const [signupUser, { isLoading, isSuccess, isError, error, data }] =

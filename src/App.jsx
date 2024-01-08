@@ -5,8 +5,7 @@ import SignUp from "./pages/SignUp";
 import IsAuthenticated from "./components/isAuthenticated";
 import Cars from "./pages/Cars";
 import Categories from "./pages/Categories";
-import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import Toast from "./components/Toast";
 
 function App() {
   return (
@@ -19,19 +18,7 @@ function App() {
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
       </Routes>
-      <ToastContainer
-        style={{ fontSize: "16px" }}
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme={"light"}
-      />
+      <Toast />
     </>
   );
 }

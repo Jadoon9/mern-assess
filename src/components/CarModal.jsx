@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-
 import { Form, Formik } from "formik";
 import Input from "./Input";
 import Button from "./Button";
@@ -10,17 +9,18 @@ import { carSchema } from "../utils/validations";
 import {
   useCreateCarMutation,
   useUpdateCarMutation,
-} from "../api/services/carAction";
+} from "../redux/services/Car";
 import { toast } from "react-toastify";
+import { useGetCategoriesQuery } from "../redux/services/Category";
 
-export default function CreateCarModal({
-  isOpen,
-  handleOpen,
-  editData,
-  refetch,
-  catData,
-}) {
-  const [createCarr, setCreateCar] = useState(false);
+const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
+  const { data: catData } = useGetCategoriesQuery(
+    { page: 1, limit: 100 },
+    {
+      refetchOnMountOrArgChange: true,
+      skip: !isOpen,
+    }
+  );
   const [createCar, { isSuccess, isError, error, data }] =
     useCreateCarMutation();
   const [
@@ -33,23 +33,33 @@ export default function CreateCarModal({
     },
   ] = useUpdateCarMutation();
 
-  useEffect(() => {
-    if (isSuccess && createCarr) {
-      toast.success(data?.message);
-      refetch();
-      handleOpen();
-    } else if (updateIsSuccess && !createCarr) {
-      toast.success(updateData?.message);
-      refetch();
-      handleOpen();
-    }
+  const handleMutationSuccess = (successMessage) => {
+    toast.success(successMessage);
+    refetch();
+    handleOpen();
+  };
 
-    if (isError) {
-      toast.error(error?.data?.message);
-    } else if (updateIsError) {
-      toast.error(updateError?.data?.message);
+  const handleMutationError = (errorMessage) => {
+    toast.error(errorMessage);
+  };
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      handleMutationSuccess(data?.message);
     }
-  }, [isSuccess, isError, updateIsError, updateIsSuccess]);
+    if (isError) {
+      handleMutationError(error?.data?.message);
+    }
+  }, [isSuccess, isError, data]);
+
+  useEffect(() => {
+    if (updateIsSuccess && updateData) {
+      handleMutationSuccess(updateData?.message);
+    }
+    if (updateIsError) {
+      handleMutationError(updateError?.data?.message);
+    }
+  }, [updateIsError, updateIsSuccess, updateData]);
 
   return (
     <>
@@ -83,32 +93,31 @@ export default function CreateCarModal({
                     as="h3"
                     className="text-lg font-medium leading-6 text-primary-500"
                   >
-                    {editData ? "Edit Car" : "Add Car"}
+                    {editData?._id ? "Edit Car" : "Add Car"}
                   </Dialog.Title>
 
                   <Formik
                     initialValues={{
-                      catName: editData?.category?.title || "",
+                      category: editData?.category?._id || "",
                       color: editData?.color || "",
                       model: editData?.model || "",
                       maker: editData?.maker || "",
-                      regNumb: editData?.registrationNo || "",
+                      registrationNo: editData?.registrationNo || "",
                     }}
                     validationSchema={carSchema}
+                    enableReinitialize={true}
                     onSubmit={(values) => {
                       const data = {
                         color: values?.color,
                         model: values?.model,
                         maker: values?.maker,
-                        registrationNo: values?.regNumb,
-                        category: values?.catName,
+                        registrationNo: values?.registrationNo,
+                        category: values?.category,
                       };
-                      if (editData?.category) {
+                      if (editData?._id) {
                         const updatedData = { data: data, id: editData?._id };
-                        setCreateCar(false);
                         updateCar(updatedData);
                       } else {
-                        setCreateCar(true);
                         createCar(data);
                       }
                     }}
@@ -120,7 +129,7 @@ export default function CreateCarModal({
                             options={catData?.data?.categories || []}
                             placeholder="Select Category"
                             label="Category"
-                            name="catName"
+                            name="category"
                           />
                           <Input
                             label="Car Color"
@@ -142,7 +151,7 @@ export default function CreateCarModal({
                           />
                           <Input
                             label="Reg #"
-                            name="regNumb"
+                            name="registrationNo"
                             type="text"
                             placeholder="Enter Regesteration Number"
                           />
@@ -150,7 +159,9 @@ export default function CreateCarModal({
                           <div className="w-1/2 ">
                             <Button
                               type="submit"
-                              btnText={editData ? "Update Car" : "Create Car"}
+                              btnText={
+                                editData?._id ? "Update Car" : "Create Car"
+                              }
                             />
                           </div>
                         </div>
@@ -165,4 +176,6 @@ export default function CreateCarModal({
       </Transition>
     </>
   );
-}
+};
+
+export default CarModal;

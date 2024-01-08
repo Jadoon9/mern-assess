@@ -1,4 +1,4 @@
-import { authApiService } from "./authService";
+import { authApiService } from "../authService";
 
 const createCarService = authApiService.injectEndpoints({
   endpoints: (build) => ({
@@ -30,7 +30,7 @@ const createCarService = authApiService.injectEndpoints({
       },
     }),
 
-    deleteProject: build.mutation({
+    deleteCar: build.mutation({
       query: (id) => {
         return {
           url: `/car/delete/${id}`,
@@ -45,6 +45,6 @@ export const {
   useCreateCarMutation,
   useGetCarsQuery,
   useUpdateCarMutation,
-  useDeleteProjectMutation,
+  useDeleteCarMutation,
 } = createCarService;
 export default createCarService;
