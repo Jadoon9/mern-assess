@@ -112,8 +112,10 @@ const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
                         model: values?.model,
                         maker: values?.maker,
                         registrationNo: values?.registrationNo,
-                        category: values?.category,
                       };
+                      if (values?.category) {
+                        data["category"] = values?.category;
+                      }
                       if (editData?._id) {
                         const updatedData = { data: data, id: editData?._id };
                         updateCar(updatedData);
@@ -125,12 +127,16 @@ const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
                     {() => (
                       <Form>
                         <div className="flex flex-col gap-6 justify-center items-center mt-2">
-                          <DropDown
-                            options={catData?.data?.categories || []}
-                            placeholder="Select Category"
-                            label="Category"
-                            name="category"
-                          />
+                          {catData?.data?.categories.length ? (
+                            <DropDown
+                              options={catData?.data?.categories || []}
+                              placeholder="Select Category"
+                              label="Category"
+                              name="category"
+                            />
+                          ) : (
+                            "Currently don't have Category. kindly Add it!"
+                          )}
                           <Input
                             label="Car Color"
                             name="color"
