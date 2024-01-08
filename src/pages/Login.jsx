@@ -20,11 +20,9 @@ const Login = () => {
   const [loginUser, { isLoading, isSuccess, isError, error, data }] =
     useLoginMutation();
 
-  console.log(isSuccess, isError, "090909");
   useEffect(() => {
     if (isSuccess) {
       toast.success(data?.message);
-      console.log(data, "checkdata");
       localStorage.setItem("token", data?.data?.token);
       dispatch(userLogin({ data: data?.data?.user, isLoggedIn: true }));
       navigate("/");
@@ -50,7 +48,6 @@ const Login = () => {
         }}
         validationSchema={loginValSchema}
         onSubmit={(values) => {
-          console.log(values, "valuess");
           loginUser({ email: values.email, password: values.password });
         }}
       >

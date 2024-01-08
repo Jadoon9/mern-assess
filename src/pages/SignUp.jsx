@@ -40,7 +40,6 @@ const SignUp = () => {
         }}
         validationSchema={signUpValSchema}
         onSubmit={(values) => {
-          console.log(values, "valuess");
           signupUser({ email: values.email });
         }}
       >
@@ -48,12 +47,7 @@ const SignUp = () => {
           <Form>
             <div className="flex flex-col bg-white justify-between custom-shadow gap-3 max-h-[550px] w-[640px] p-10 rounded-[16px] ">
               <h2 className="h2-bold">Create an account</h2>
-              {/* <Input
-                type="text"
-                placeholder="User Name"
-                label="User Name"
-                name="userName"
-              /> */}
+
               <Input
                 type="text"
                 placeholder="test"
@@ -61,20 +55,7 @@ const SignUp = () => {
                 name="email"
                 isRequired
               />
-              {/* <Input
-                type="password"
-                placeholder="password"
-                label="Password"
-                name="password"
-                isRequired
-              />
-              <Input
-                type="password"
-                placeholder="Confirm password"
-                label="Confirm Password"
-                name="confirmPassword"
-                isRequired
-              /> */}
+
               <p
                 className="body-regular  primary-color cursor-pointer border-b border-[primary-color] w-fit"
                 onClick={() => navigate("/sign-in")}

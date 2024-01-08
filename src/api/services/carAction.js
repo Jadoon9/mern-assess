@@ -13,6 +13,7 @@ const createCarService = authApiService.injectEndpoints({
     }),
     updateCar: build.mutation({
       query: (data) => {
+        console.log(data, "98898");
         return {
           url: `/car/update/${data.id}`,
           method: "PATCH",

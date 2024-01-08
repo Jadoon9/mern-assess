@@ -5,16 +5,19 @@ import { convertUtcToLocalTime } from "./helpers";
 const handleClick = (e, id, handleDelModalOpen) => {
   e.stopPropagation();
   handleDelModalOpen(id);
-  console.log(`You clicked me! ${id}`);
 };
 const handleClickEdit = (e, data, handleModalOpen) => {
   e.stopPropagation();
   handleModalOpen(data);
-  console.log(`You clicked me! ${data}`);
 };
 
 export const getColumnsData = (handleDelModalOpen, handleModalOpen) => {
   return [
+    {
+      name: "Category Name",
+      selector: "title",
+      sortable: true,
+    },
     {
       name: "Created At",
       selector: "createdAt",
@@ -22,11 +25,6 @@ export const getColumnsData = (handleDelModalOpen, handleModalOpen) => {
       cell: (row) => convertUtcToLocalTime(row.createdAt),
     },
 
-    {
-      name: "Category Name",
-      selector: "title",
-      sortable: true,
-    },
     {
       name: "Action",
       sortable: false,
@@ -51,6 +49,9 @@ export const getCarsData = (handleDelModalOpen, handleModalOpen) => {
       name: "Category",
       selector: "caregory",
       sortable: true,
+      cell: (row) => {
+        return row?.category?.title;
+      },
     },
 
     {

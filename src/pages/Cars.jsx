@@ -24,7 +24,6 @@ const Tasks = () => {
     }
   );
 
-  console.log(setPage, "catData");
   const { isLoading, refetch, data } = useGetCarsQuery(
     { page },
     {
@@ -60,6 +59,7 @@ const Tasks = () => {
         handleOpen={handleModalOpen}
         editData={editData}
         catData={catData}
+        refetch={refetch}
       />
       <DeleteModal
         isOpen={isDeleteOpen}

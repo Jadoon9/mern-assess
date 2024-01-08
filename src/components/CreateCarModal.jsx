@@ -83,13 +83,12 @@ export default function CreateCarModal({
                     as="h3"
                     className="text-lg font-medium leading-6 text-[#9f7aea]"
                   >
-                    Add Car
+                    {editData ? "Edit Car" : "Add Car"}
                   </Dialog.Title>
 
                   <Formik
                     initialValues={{
-                      catName: editData?.title || "",
-                      // carName: editData?.carName || "",
+                      catName: editData?.category?.title || "",
                       color: editData?.color || "",
                       model: editData?.model || "",
                       maker: editData?.maker || "",
@@ -97,6 +96,7 @@ export default function CreateCarModal({
                     }}
                     validationSchema={carSchema}
                     onSubmit={(values) => {
+                      console.log(values, "asdad");
                       const data = {
                         color: values?.color,
                         model: values?.model,
@@ -104,9 +104,11 @@ export default function CreateCarModal({
                         registrationNo: values?.regNumb,
                         category: values?.catName,
                       };
-                      if (editData?.title) {
+                      if (editData) {
+                        const updatedData = { data: data, id: editData?._id };
+                        console.log(updateData, "090909");
                         setCreateCar(false);
-                        updateCar(data);
+                        updateCar(updatedData);
                       } else {
                         setCreateCar(true);
                         createCar(data);
@@ -116,19 +118,11 @@ export default function CreateCarModal({
                     {() => (
                       <Form>
                         <div className="flex flex-col gap-6 justify-center items-center mt-2">
-                          {/* <Input
-                            label="Car Name"
-                            name="carName"
-                            type="text"
-                            placeholder="Enter Car Name"
-                          /> */}
                           <DropDown
                             options={catData?.data?.categories || []}
-                            drpName="catName"
                             placeholder="Select Category"
                             label="Category"
                             name="catName"
-                            isRequired
                           />
                           <Input
                             label="Car Color"
@@ -143,14 +137,23 @@ export default function CreateCarModal({
                             placeholder="Enter Car Maker"
                           />
                           <Input
-                            label="Car Name"
+                            label="Car Model"
+                            name="model"
+                            type="text"
+                            placeholder="Enter Car Model"
+                          />
+                          <Input
+                            label="Reg #"
                             name="regNumb"
                             type="text"
                             placeholder="Enter Regesteration Number"
                           />
 
                           <div className="w-1/2 ">
-                            <Button type="submit" btnText="Create Car" />
+                            <Button
+                              type="submit"
+                              btnText={editData ? "Update Car" : "Create Car"}
+                            />
                           </div>
                         </div>
                       </Form>

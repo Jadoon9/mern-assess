@@ -22,7 +22,6 @@ const Categories = () => {
     }
   );
 
-  console.log(setPage);
   const handleModalOpen = (data) => {
     setIsOpen(!isOpen);
     if (data) {
@@ -31,7 +30,6 @@ const Categories = () => {
   };
   const handleDelModalOpen = (id) => {
     setIsDeleteOpen(!isDeleteOpen);
-    console.log(id, "hjkjh");
     if (id) {
       setDeleteId(id);
     }
@@ -40,7 +38,6 @@ const Categories = () => {
   if (isLoading) {
     <Loader />;
   }
-  console.log(editData, "0909");
 
   return (
     <div className="px-40">

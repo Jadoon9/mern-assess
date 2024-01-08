@@ -13,7 +13,6 @@ const createCategoryService = authApiService.injectEndpoints({
     }),
     updateCategory: build.mutation({
       query: (data) => {
-        console.log(data, "0909090");
         return {
           url: `/category/update/${data.id}`,
           method: "PATCH",

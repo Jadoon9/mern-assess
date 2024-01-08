@@ -94,7 +94,6 @@ export default function CreateCategory({
                           id: editData?._id,
                           title: values.catName,
                         };
-                        console.log(data, "09");
                         setCreateCar(false);
                         updateCat(data);
                       } else {
