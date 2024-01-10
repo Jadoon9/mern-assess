@@ -13,9 +13,11 @@ export const loginValSchema = yup.object({
     .required("Email is required"),
   password: yup.string().required("Password is required"),
 });
+
 export const categorySchema = yup.object({
   title: yup.string().required("Category Name is required"),
 });
+
 export const carSchema = yup.object({
   color: yup.string().required("Car color is required"),
   model: yup.string().required("Car modle is required"),

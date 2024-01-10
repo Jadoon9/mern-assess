@@ -4,7 +4,9 @@ import DataTable from "../components/DataTable.jsx";
 import { getCategoryCol } from "../utils/data.jsx";
 import DeleteModal from "../components/DeleteModal.jsx";
 import CategoryModal from "../components/CategoryModal.jsx";
-import { useGetCategoriesQuery } from "../redux/services/Category";
+// import { useGetCategoriesQuery } from "../redux/services/Category";
+import { useQuery } from "@tanstack/react-query";
+import { getAllCategories } from "../reactQueryPractice/categoryActions/index.js";
 
 const Categories = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,12 +15,17 @@ const Categories = () => {
   const [editData, setEditData] = useState("");
   const [page, setPage] = useState(1);
 
-  const { isLoading, isFetching, refetch, data } = useGetCategoriesQuery(
-    { page },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  // const { isLoading, isFetching, refetch, data } = useGetCategoriesQuery(
+  //   { page },
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //   }
+  // );
+
+  const { isPending, data } = useQuery({
+    queryKey: ["categories", { page }],
+    queryFn: (page) => getAllCategories(page),
+  });
 
   const handleModalOpen = (data) => {
     setIsOpen(!isOpen);
@@ -45,20 +52,21 @@ const Categories = () => {
         columns={getCategoryCol(handleDelModalOpen, handleModalOpen)}
         totalRows={data?.data?.count}
         setPage={setPage}
-        isLoading={isLoading || isFetching}
+        isLoading={isPending}
+        // isLoading={isPending || isFetching}
       />
 
       <CategoryModal
         isOpen={isOpen}
         handleOpen={handleModalOpen}
         editData={editData}
-        refetch={refetch}
+        // refetch={refetch}
       />
       <DeleteModal
         isOpen={isDeleteOpen}
         handleOpen={handleDelModalOpen}
         id={deleteId}
-        refetch={refetch}
+        // refetch={refetch}
       />
     </div>
   );

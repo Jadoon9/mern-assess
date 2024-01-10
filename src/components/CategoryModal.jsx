@@ -6,14 +6,27 @@ import Input from "./Input";
 import Button from "./Button";
 import { categorySchema } from "../utils/validations";
 import {
-  useCreateCategoryMutation,
+  // useCreateCategoryMutation,
   useUpdateCategoryMutation,
 } from "../redux/services/Category";
 import { toast } from "react-toastify";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { addCategory } from "../reactQueryPractice/categoryActions";
 
-const CategoryModal = ({ isOpen, handleOpen, refetch, editData }) => {
-  const [createCat, { isSuccess, isError, error, data }] =
-    useCreateCategoryMutation();
+const CategoryModal = ({ isOpen, handleOpen, editData }) => {
+  const queryClient = useQueryClient();
+  // const [createCat, { isSuccess, isError, error, data }] =
+  //   useCreateCategoryMutation();
+
+  const { isSuccess, isError, data, error, mutate } = useMutation({
+    mutationFn: addCategory,
+    onSuccess: queryClient.invalidateQueries({ queryKey: "categories" }),
+    onError: (aa) => {
+      console.log(aa, "0909212");
+    },
+  });
+
+  console.log(isSuccess, isError, error, "90909");
   const [
     updateCat,
     {
@@ -26,7 +39,7 @@ const CategoryModal = ({ isOpen, handleOpen, refetch, editData }) => {
 
   const handleMutationSuccess = (successMessage) => {
     toast.success(successMessage);
-    refetch();
+    // refetch();
     handleOpen();
   };
 
@@ -35,11 +48,11 @@ const CategoryModal = ({ isOpen, handleOpen, refetch, editData }) => {
   };
 
   useEffect(() => {
-    if (isSuccess && data) {
+    if (isSuccess) {
       handleMutationSuccess(data?.message);
     }
     if (isError) {
-      handleMutationError(error?.data?.message);
+      handleMutationError(error?.message);
     }
   }, [isSuccess, isError, data]);
 
@@ -99,7 +112,8 @@ const CategoryModal = ({ isOpen, handleOpen, refetch, editData }) => {
                         data["id"] = editData?._id;
                         updateCat(data);
                       } else {
-                        createCat(data);
+                        mutate(data);
+                        // createCat(data);
                       }
                     }}
                   >

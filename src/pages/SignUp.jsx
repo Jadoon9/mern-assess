@@ -9,11 +9,17 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import Loader from "../components/Loader";
 import { useSignUpMutation } from "../redux/services/Auth";
+// import { useMutation } from "@tanstack/react-query";
+// import { signUp } from "../reactQueryPractice/authActions";
 
 const SignUp = () => {
   const [signupUser, { isLoading, isSuccess, isError, error, data }] =
     useSignUpMutation();
   const navigate = useNavigate();
+
+  // const { data, error, isPending, isError, isSuccess, mutate } = useMutation({
+  //   mutationFn: signUp,
+  // });
 
   useEffect(() => {
     if (isSuccess) {
@@ -21,7 +27,7 @@ const SignUp = () => {
       navigate("/sign-in");
     }
     if (isError) {
-      toast.error(error?.data?.message);
+      toast.error(error?.respnse?.data?.message);
     }
   }, [isSuccess, isError]);
 
@@ -40,6 +46,7 @@ const SignUp = () => {
         }}
         validationSchema={signUpValSchema}
         onSubmit={(values) => {
+          // mutate({ email: values.email });
           signupUser({ email: values.email });
         }}
       >

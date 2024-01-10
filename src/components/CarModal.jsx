@@ -7,22 +7,36 @@ import Button from "./Button";
 import DropDown from "./Dropdown";
 import { carSchema } from "../utils/validations";
 import {
-  useCreateCarMutation,
+  // useCreateCarMutation,
   useUpdateCarMutation,
 } from "../redux/services/Car";
 import { toast } from "react-toastify";
-import { useGetCategoriesQuery } from "../redux/services/Category";
+// import { useGetCategoriesQuery } from "../redux/services/Category";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { createCar } from "../reactQueryPractice/carActions";
+import { getAllCategories } from "../reactQueryPractice/categoryActions";
 
 const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
-  const { data: catData } = useGetCategoriesQuery(
-    { page: 1, limit: 100 },
-    {
-      refetchOnMountOrArgChange: true,
-      skip: !isOpen,
-    }
-  );
-  const [createCar, { isSuccess, isError, error, data }] =
-    useCreateCarMutation();
+  const { isPending, isError, isSuccess, error, mutate, data } = useMutation({
+    mutationFn: createCar,
+  });
+
+  const allCategories = useQuery({
+    queryKey: ["categories", { page: 1 }],
+    enabled: isOpen,
+    queryFn: (page) => getAllCategories(page),
+  });
+
+  // const { data: catData } = useGetCategoriesQuery(
+  //   { page: 1, limit: 100 },
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //     skip: !isOpen,
+  //   }
+  // );
+  // const [createCar, { isSuccess, isError, error, data }] =
+  //   useCreateCarMutation();
+
   const [
     updateCar,
     {
@@ -42,15 +56,15 @@ const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
   const handleMutationError = (errorMessage) => {
     toast.error(errorMessage);
   };
-
-  useEffect(() => {
-    if (isSuccess && data) {
-      handleMutationSuccess(data?.message);
-    }
-    if (isError) {
-      handleMutationError(error?.data?.message);
-    }
-  }, [isSuccess, isError, data]);
+  console.log(allCategories, "allCategories");
+  // useEffect(() => {
+  //   if (isSuccess && data) {
+  //     handleMutationSuccess(data?.message);
+  //   }
+  //   if (isError) {
+  //     handleMutationError(error?.data?.message);
+  //   }
+  // }, [isSuccess, isError, data]);
 
   useEffect(() => {
     if (updateIsSuccess && updateData) {
@@ -126,7 +140,9 @@ const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
                       <Form>
                         <div className="flex flex-col gap-6 justify-center items-center mt-2">
                           <DropDown
-                            options={catData?.data?.categories || []}
+                            options={
+                              allCategories?.data?.data?.categories || []
+                            }
                             placeholder="Select Category"
                             label="Category"
                             name="category"

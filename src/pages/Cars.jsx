@@ -3,8 +3,10 @@ import Button from "../components/Button.jsx";
 import DataTable from "../components/DataTable.jsx";
 import { getCarsCol } from "../utils/data.jsx";
 import DeleteModal from "../components/DeleteModal.jsx";
-import { useGetCarsQuery } from "../redux/services/Car";
+// import { useGetCarsQuery } from "../redux/services/Car";
 import CarModal from "../components/CarModal.jsx";
+import { useQuery } from "@tanstack/react-query";
+import { getAllCars } from "../reactQueryPractice/carActions/index.js";
 
 const Tasks = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,12 +15,18 @@ const Tasks = () => {
   const [editData, setEditData] = useState(null);
   const [page, setPage] = useState(1);
 
-  const { isLoading, isFetching, refetch, data } = useGetCarsQuery(
-    { page },
-    {
-      refetchOnMountOrArgChange: true,
-    }
-  );
+  const { isPending, data } = useQuery({
+    queryKey: ["cas", page],
+    queryFn: (page) => getAllCars(page),
+  });
+
+  // const { isLoading, isFetching, refetch, data } = useGetCarsQuery(
+  //   { page },
+  //   {
+  //     refetchOnMountOrArgChange: true,
+  //   }
+  // );
+  console.log(data, "checkdata");
 
   const handleModalOpen = (data) => {
     setIsOpen(!isOpen);
@@ -48,20 +56,20 @@ const Tasks = () => {
         columns={getCarsCol(handleDelModalOpen, handleModalOpen)}
         totalRows={data?.data?.count}
         setPage={setPage}
-        isLoading={isLoading || isFetching}
+        isLoading={isPending}
       />
 
       <CarModal
         isOpen={isOpen}
         handleOpen={handleModalOpen}
         editData={editData}
-        refetch={refetch}
+        // refetch={refetch}
       />
       <DeleteModal
         isOpen={isDeleteOpen}
         handleOpen={handleDelModalOpen}
         id={deleteId}
-        refetch={refetch}
+        // refetch={refetch}
         myKey={true}
       />
     </div>
