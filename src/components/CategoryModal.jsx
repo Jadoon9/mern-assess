@@ -5,31 +5,25 @@ import { Form, Formik } from "formik";
 import Input from "./Input";
 import Button from "./Button";
 import { categorySchema } from "../utils/validations";
-import {
-  // useCreateCategoryMutation,
-  useUpdateCategoryMutation,
-} from "../redux/services/Category";
+
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { addCategory } from "../reactQueryPractice/categoryActions";
+import {
+  addCategory,
+  updateCategoryData,
+} from "../reactQueryPractice/categoryActions";
 
 const CategoryModal = ({ isOpen, handleOpen, editData }) => {
   const queryClient = useQueryClient();
 
   const { isSuccess, isError, data, error, mutate } = useMutation({
     mutationFn: addCategory,
-    onSuccess: queryClient.invalidateQueries("categories"),
+    onSettled: () => queryClient.invalidateQueries(["categories"]),
   });
-
-  const [
-    updateCat,
-    {
-      isSuccess: updateIsSuccess,
-      isError: updateIsError,
-      error: updateError,
-      data: updateData,
-    },
-  ] = useUpdateCategoryMutation();
+  const updateCategory = useMutation({
+    mutationFn: updateCategoryData,
+    onSettled: () => queryClient.invalidateQueries(["categories"]),
+  });
 
   const handleMutationSuccess = (successMessage) => {
     toast.success(successMessage);
@@ -40,6 +34,7 @@ const CategoryModal = ({ isOpen, handleOpen, editData }) => {
     toast.error(errorMessage);
   };
 
+  // * fOR add
   useEffect(() => {
     if (isSuccess) {
       handleMutationSuccess(data?.message);
@@ -49,14 +44,15 @@ const CategoryModal = ({ isOpen, handleOpen, editData }) => {
     }
   }, [isSuccess, isError, data]);
 
+  //* For update
   useEffect(() => {
-    if (updateIsSuccess && updateData) {
-      handleMutationSuccess(updateData?.message);
+    if (updateCategory.isSuccess && updateCategory.data) {
+      handleMutationSuccess(updateCategory?.data?.message);
     }
-    if (updateIsError) {
-      handleMutationError(updateError?.data?.message);
+    if (updateCategory?.isError) {
+      handleMutationError(updateCategory.error?.message);
     }
-  }, [updateIsError, updateIsSuccess, updateData]);
+  }, [updateCategory.isError, updateCategory.isSuccess, updateCategory.data]);
 
   return (
     <>
@@ -103,10 +99,9 @@ const CategoryModal = ({ isOpen, handleOpen, editData }) => {
                       let data = { title: values.title };
                       if (editData?.title) {
                         data["id"] = editData?._id;
-                        updateCat(data);
+                        updateCategory.mutate(data);
                       } else {
                         mutate(data);
-                        // createCat(data);
                       }
                     }}
                   >

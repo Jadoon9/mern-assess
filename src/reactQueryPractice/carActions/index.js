@@ -10,3 +10,13 @@ export const createCar = async (data) => {
   const response = await authApi.post(`/car/add/`, data);
   return response.data;
 };
+
+export const updateCarData = async (data) => {
+  const response = await authApi.patch(`/car/update/${data.id}`, data);
+  return response.data;
+};
+
+export const deleteCarData = async (id) => {
+  const response = await authApi.delete(`/car/delete/${id}`);
+  return response.data;
+};

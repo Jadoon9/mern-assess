@@ -2,32 +2,24 @@
 import React, { Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "./Button";
-import { useDeleteCategoriesMutation } from "../redux/services/Category";
+// import { useDeleteCategoriesMutation } from "../redux/services/Category";
 import { toast } from "react-toastify";
-import { useDeleteCarMutation } from "../redux/services/Car";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { deleteCarData } from "../reactQueryPractice/carActions";
 
-export default function DeleteModal({
-  isOpen,
-  handleOpen,
-  id,
-  refetch,
-  myKey = false,
-}) {
-  const [deleteCat, { isSuccess, isError, error, data }] =
-    useDeleteCategoriesMutation();
-  const [
-    deleteCar,
-    {
-      isSuccess: delIsSuccess,
-      isError: delIsError,
-      error: delError,
-      data: delData,
-    },
-  ] = useDeleteCarMutation();
+export default function DeleteModal({ isOpen, handleOpen, id, myKey = false }) {
+  const queryClient = useQueryClient();
+  // const [deleteCat, { isSuccess, isError, error, data }] =
+  //   useDeleteCategoriesMutation();
+
+  const { isSuccess, isError, data, error, mutate } = useMutation({
+    enabled: isOpen,
+    mutationFn: deleteCarData,
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars"] }),
+  });
 
   const handleMutationSuccess = (successMessage) => {
     toast.success(successMessage);
-    refetch();
     handleOpen();
   };
 
@@ -35,23 +27,23 @@ export default function DeleteModal({
     toast.error(errorMessage);
   };
 
+  // useEffect(() => {
+  //   if (isSuccess && data) {
+  //     handleMutationSuccess(data?.message);
+  //   }
+  //   if (isError) {
+  //     handleMutationError(error?.data?.message);
+  //   }
+  // }, [isSuccess, isError, data]);
+
   useEffect(() => {
     if (isSuccess && data) {
       handleMutationSuccess(data?.message);
     }
     if (isError) {
-      handleMutationError(error?.data?.message);
+      handleMutationError(error?.message);
     }
   }, [isSuccess, isError, data]);
-
-  useEffect(() => {
-    if (delIsSuccess && delData) {
-      handleMutationSuccess(delData?.message);
-    }
-    if (delIsError) {
-      handleMutationError(delError?.data?.message);
-    }
-  }, [delIsSuccess, delIsError, delData]);
 
   return (
     <>
@@ -95,9 +87,9 @@ export default function DeleteModal({
                       nobg
                       onClick={() => {
                         if (myKey) {
-                          deleteCar(id);
+                          mutate(id);
                         } else {
-                          deleteCat(id);
+                          // deleteCat(id);
                         }
                       }}
                     />

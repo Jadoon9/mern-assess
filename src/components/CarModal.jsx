@@ -6,38 +6,31 @@ import Input from "./Input";
 import Button from "./Button";
 import DropDown from "./Dropdown";
 import { carSchema } from "../utils/validations";
-import {
-  // useCreateCarMutation,
-  useUpdateCarMutation,
-} from "../redux/services/Car";
+
 import { toast } from "react-toastify";
-// import { useGetCategoriesQuery } from "../redux/services/Category";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { createCar } from "../reactQueryPractice/carActions";
+import { createCar, updateCarData } from "../reactQueryPractice/carActions";
 import { getAllCategories } from "../reactQueryPractice/categoryActions";
 
 const CarModal = ({ isOpen, handleOpen, editData }) => {
   const queryClient = useQueryClient();
+
   const { isError, isSuccess, error, mutate, data } = useMutation({
     mutationFn: createCar,
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars"] }),
   });
 
-  const allCategories = useQuery({
-    queryKey: ["categories", { page: 1 }],
-    enabled: isOpen,
-    queryFn: (page) => getAllCategories(page),
+  const updateCar = useMutation({
+    mutationFn: updateCarData,
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars"] }),
   });
 
-  const [
-    updateCar,
-    {
-      isSuccess: updateIsSuccess,
-      isError: updateIsError,
-      error: updateError,
-      data: updateData,
-    },
-  ] = useUpdateCarMutation();
+  const allCategories = useQuery({
+    queryKey: ["categories", { page: 1, limit: 100 }],
+    enabled: isOpen,
+    queryFn: (page) => getAllCategories(page),
+    staleTime: 5 * 1000,
+  });
 
   const handleMutationSuccess = (successMessage) => {
     toast.success(successMessage);
@@ -58,13 +51,13 @@ const CarModal = ({ isOpen, handleOpen, editData }) => {
   }, [isSuccess, isError, data]);
 
   useEffect(() => {
-    if (updateIsSuccess && updateData) {
-      handleMutationSuccess(updateData?.message);
+    if (updateCar.isSuccess && updateCar) {
+      handleMutationSuccess(updateCar?.data?.message);
     }
-    if (updateIsError) {
-      handleMutationError(updateError?.message);
+    if (updateCar?.isError) {
+      handleMutationError(updateCar.error?.message);
     }
-  }, [updateIsError, updateIsSuccess, updateData]);
+  }, [updateCar?.isError, updateCar?.isSuccess, updateCar?.data]);
 
   return (
     <>
@@ -121,7 +114,7 @@ const CarModal = ({ isOpen, handleOpen, editData }) => {
                       };
                       if (editData?._id) {
                         const updatedData = { data: data, id: editData?._id };
-                        updateCar(updatedData);
+                        updateCar.mutate(updatedData);
                       } else {
                         mutate(data);
                       }
