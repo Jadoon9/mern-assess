@@ -15,18 +15,12 @@ import { addCategory } from "../reactQueryPractice/categoryActions";
 
 const CategoryModal = ({ isOpen, handleOpen, editData }) => {
   const queryClient = useQueryClient();
-  // const [createCat, { isSuccess, isError, error, data }] =
-  //   useCreateCategoryMutation();
 
   const { isSuccess, isError, data, error, mutate } = useMutation({
     mutationFn: addCategory,
-    onSuccess: queryClient.invalidateQueries({ queryKey: "categories" }),
-    onError: (aa) => {
-      console.log(aa, "0909212");
-    },
+    onSuccess: queryClient.invalidateQueries("categories"),
   });
 
-  console.log(isSuccess, isError, error, "90909");
   const [
     updateCat,
     {
@@ -39,7 +33,6 @@ const CategoryModal = ({ isOpen, handleOpen, editData }) => {
 
   const handleMutationSuccess = (successMessage) => {
     toast.success(successMessage);
-    // refetch();
     handleOpen();
   };
 

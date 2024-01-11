@@ -12,13 +12,15 @@ import {
 } from "../redux/services/Car";
 import { toast } from "react-toastify";
 // import { useGetCategoriesQuery } from "../redux/services/Category";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createCar } from "../reactQueryPractice/carActions";
 import { getAllCategories } from "../reactQueryPractice/categoryActions";
 
-const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
-  const { isPending, isError, isSuccess, error, mutate, data } = useMutation({
+const CarModal = ({ isOpen, handleOpen, editData }) => {
+  const queryClient = useQueryClient();
+  const { isError, isSuccess, error, mutate, data } = useMutation({
     mutationFn: createCar,
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars"] }),
   });
 
   const allCategories = useQuery({
@@ -26,16 +28,6 @@ const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
     enabled: isOpen,
     queryFn: (page) => getAllCategories(page),
   });
-
-  // const { data: catData } = useGetCategoriesQuery(
-  //   { page: 1, limit: 100 },
-  //   {
-  //     refetchOnMountOrArgChange: true,
-  //     skip: !isOpen,
-  //   }
-  // );
-  // const [createCar, { isSuccess, isError, error, data }] =
-  //   useCreateCarMutation();
 
   const [
     updateCar,
@@ -49,29 +41,28 @@ const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
 
   const handleMutationSuccess = (successMessage) => {
     toast.success(successMessage);
-    refetch();
     handleOpen();
   };
 
   const handleMutationError = (errorMessage) => {
     toast.error(errorMessage);
   };
-  console.log(allCategories, "allCategories");
-  // useEffect(() => {
-  //   if (isSuccess && data) {
-  //     handleMutationSuccess(data?.message);
-  //   }
-  //   if (isError) {
-  //     handleMutationError(error?.data?.message);
-  //   }
-  // }, [isSuccess, isError, data]);
+
+  useEffect(() => {
+    if (isSuccess && data) {
+      handleMutationSuccess(data?.message);
+    }
+    if (isError) {
+      handleMutationError(error?.message);
+    }
+  }, [isSuccess, isError, data]);
 
   useEffect(() => {
     if (updateIsSuccess && updateData) {
       handleMutationSuccess(updateData?.message);
     }
     if (updateIsError) {
-      handleMutationError(updateError?.data?.message);
+      handleMutationError(updateError?.message);
     }
   }, [updateIsError, updateIsSuccess, updateData]);
 
@@ -132,7 +123,7 @@ const CarModal = ({ isOpen, handleOpen, editData, refetch }) => {
                         const updatedData = { data: data, id: editData?._id };
                         updateCar(updatedData);
                       } else {
-                        createCar(data);
+                        mutate(data);
                       }
                     }}
                   >

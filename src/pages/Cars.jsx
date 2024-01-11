@@ -16,17 +16,9 @@ const Tasks = () => {
   const [page, setPage] = useState(1);
 
   const { isPending, data } = useQuery({
-    queryKey: ["cas", page],
+    queryKey: ["cars", page],
     queryFn: (page) => getAllCars(page),
   });
-
-  // const { isLoading, isFetching, refetch, data } = useGetCarsQuery(
-  //   { page },
-  //   {
-  //     refetchOnMountOrArgChange: true,
-  //   }
-  // );
-  console.log(data, "checkdata");
 
   const handleModalOpen = (data) => {
     setIsOpen(!isOpen);
@@ -63,13 +55,11 @@ const Tasks = () => {
         isOpen={isOpen}
         handleOpen={handleModalOpen}
         editData={editData}
-        // refetch={refetch}
       />
       <DeleteModal
         isOpen={isDeleteOpen}
         handleOpen={handleDelModalOpen}
         id={deleteId}
-        // refetch={refetch}
         myKey={true}
       />
     </div>

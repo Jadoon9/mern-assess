@@ -7,6 +7,6 @@ export const getAllCars = async ({ queryKey }) => {
 };
 
 export const createCar = async (data) => {
-  const response = await authApi.get(`/car/add/`, data);
+  const response = await authApi.post(`/car/add/`, data);
   return response.data;
 };

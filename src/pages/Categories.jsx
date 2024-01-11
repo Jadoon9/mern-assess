@@ -15,13 +15,6 @@ const Categories = () => {
   const [editData, setEditData] = useState("");
   const [page, setPage] = useState(1);
 
-  // const { isLoading, isFetching, refetch, data } = useGetCategoriesQuery(
-  //   { page },
-  //   {
-  //     refetchOnMountOrArgChange: true,
-  //   }
-  // );
-
   const { isPending, data } = useQuery({
     queryKey: ["categories", { page }],
     queryFn: (page) => getAllCategories(page),
