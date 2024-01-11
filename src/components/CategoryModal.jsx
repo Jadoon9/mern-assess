@@ -5,7 +5,6 @@ import { Form, Formik } from "formik";
 import Input from "./Input";
 import Button from "./Button";
 import { categorySchema } from "../utils/validations";
-
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
@@ -16,7 +15,7 @@ import {
 const CategoryModal = ({ isOpen, handleOpen, editData }) => {
   const queryClient = useQueryClient();
 
-  const { isSuccess, isError, data, error, mutate } = useMutation({
+  const { isSuccess, isError, data, error, mutate, isPending } = useMutation({
     mutationFn: addCategory,
     onSettled: () => queryClient.invalidateQueries(["categories"]),
   });
@@ -117,6 +116,7 @@ const CategoryModal = ({ isOpen, handleOpen, editData }) => {
 
                           <div className="w-1/2 ">
                             <Button
+                              disabled={isPending}
                               btnText={
                                 editData?._id
                                   ? "Update Category"

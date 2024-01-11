@@ -4,7 +4,6 @@ import DataTable from "../components/DataTable.jsx";
 import { getCategoryCol } from "../utils/data.jsx";
 import DeleteModal from "../components/DeleteModal.jsx";
 import CategoryModal from "../components/CategoryModal.jsx";
-// import { useGetCategoriesQuery } from "../redux/services/Category";
 import { useQuery } from "@tanstack/react-query";
 import { getAllCategories } from "../reactQueryPractice/categoryActions/index.js";
 
@@ -18,6 +17,7 @@ const Categories = () => {
   const { isPending, data } = useQuery({
     queryKey: ["categories", { page }],
     queryFn: (page) => getAllCategories(page),
+    staleTime: 2 * 60 * 1000,
   });
 
   const handleModalOpen = (data) => {
@@ -46,20 +46,17 @@ const Categories = () => {
         totalRows={data?.data?.count}
         setPage={setPage}
         isLoading={isPending}
-        // isLoading={isPending || isFetching}
       />
 
       <CategoryModal
         isOpen={isOpen}
         handleOpen={handleModalOpen}
         editData={editData}
-        // refetch={refetch}
       />
       <DeleteModal
         isOpen={isDeleteOpen}
         handleOpen={handleDelModalOpen}
         id={deleteId}
-        // refetch={refetch}
       />
     </div>
   );

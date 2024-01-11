@@ -18,7 +18,7 @@ const Tasks = () => {
   const { isPending, data } = useQuery({
     queryKey: ["cars", page],
     queryFn: (page) => getAllCars(page),
-    staleTime: 5 * 1000,
+    staleTime: 2 * 60 * 1000,
   });
 
   const handleModalOpen = (data) => {

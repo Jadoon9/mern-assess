@@ -2,20 +2,25 @@
 import React, { Fragment, useEffect } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import Button from "./Button";
-// import { useDeleteCategoriesMutation } from "../redux/services/Category";
 import { toast } from "react-toastify";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteCarData } from "../reactQueryPractice/carActions";
+import { deleteCategoryData } from "../reactQueryPractice/categoryActions";
 
 export default function DeleteModal({ isOpen, handleOpen, id, myKey = false }) {
   const queryClient = useQueryClient();
-  // const [deleteCat, { isSuccess, isError, error, data }] =
-  //   useDeleteCategoriesMutation();
 
   const { isSuccess, isError, data, error, mutate } = useMutation({
     enabled: isOpen,
     mutationFn: deleteCarData,
     onSettled: () => queryClient.invalidateQueries({ queryKey: ["cars"] }),
+  });
+
+  const deleteCategory = useMutation({
+    enabled: isOpen,
+    mutationFn: deleteCategoryData,
+    onSettled: () =>
+      queryClient.invalidateQueries({ queryKey: ["categories"] }),
   });
 
   const handleMutationSuccess = (successMessage) => {
@@ -27,14 +32,18 @@ export default function DeleteModal({ isOpen, handleOpen, id, myKey = false }) {
     toast.error(errorMessage);
   };
 
-  // useEffect(() => {
-  //   if (isSuccess && data) {
-  //     handleMutationSuccess(data?.message);
-  //   }
-  //   if (isError) {
-  //     handleMutationError(error?.data?.message);
-  //   }
-  // }, [isSuccess, isError, data]);
+  useEffect(() => {
+    if (deleteCategory.isSuccess && deleteCategory.data) {
+      handleMutationSuccess(deleteCategory?.data?.message);
+    }
+    if (deleteCategory?.isError) {
+      handleMutationError(deleteCategory?.error?.message);
+    }
+  }, [
+    deleteCategory?.isSuccess,
+    deleteCategory?.isError,
+    deleteCategory?.data,
+  ]);
 
   useEffect(() => {
     if (isSuccess && data) {
@@ -89,7 +98,7 @@ export default function DeleteModal({ isOpen, handleOpen, id, myKey = false }) {
                         if (myKey) {
                           mutate(id);
                         } else {
-                          // deleteCat(id);
+                          deleteCategory.mutate(id);
                         }
                       }}
                     />

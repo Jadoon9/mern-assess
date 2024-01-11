@@ -11,6 +11,15 @@ import { toast } from "react-toastify";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createCar, updateCarData } from "../reactQueryPractice/carActions";
 import { getAllCategories } from "../reactQueryPractice/categoryActions";
+import { useIsFetching } from "@tanstack/react-query";
+
+function GlobalLoadingIndicator() {
+  const isFetching = useIsFetching();
+
+  return isFetching ? (
+    <div>Queries are fetching in the background...</div>
+  ) : null;
+}
 
 const CarModal = ({ isOpen, handleOpen, editData }) => {
   const queryClient = useQueryClient();
@@ -61,6 +70,7 @@ const CarModal = ({ isOpen, handleOpen, editData }) => {
 
   return (
     <>
+      <GlobalLoadingIndicator />
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={handleOpen}>
           <Transition.Child
